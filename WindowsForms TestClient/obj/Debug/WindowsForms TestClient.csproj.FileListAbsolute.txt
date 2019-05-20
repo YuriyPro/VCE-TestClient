@@ -1,0 +1,20 @@
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\WindowsForms TestClient.exe.config
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\WindowsForms TestClient.exe
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\WindowsForms TestClient.pdb
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\EntityFramework.dll
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\EntityFramework.SqlServer.dll
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\EntityFramework.xml
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\EntityFramework.SqlServer.xml
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms_TestClient.Entry.resources
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms_TestClient.Forms.Register.resources
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms_TestClient.Properties.Resources.resources
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms TestClient.csproj.GenerateResource.cache
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms TestClient.csproj.CoreCompileInputs.cache
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms TestClient.csproj.CopyComplete
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms TestClient.exe
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms TestClient.pdb
+C:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms_TestClient.Forms.Work.resources
+C:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\obj\Debug\WindowsForms TestClient.csprojAssemblyReference.cache
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\Forms\Work.resx
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\Forms\Work.cs
+c:\Users\prots\source\repos\WindowsForms TestClient\WindowsForms TestClient\bin\Debug\Forms\Work.Designer.cs
