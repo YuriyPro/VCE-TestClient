@@ -59,6 +59,7 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.txtPort = new System.Windows.Forms.TextBox();
             this.lblPort = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // textBox4
@@ -347,11 +348,21 @@
             this.lblPort.Text = "Port:";
             this.lblPort.Visible = false;
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(306, 436);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(30, 13);
+            this.label9.TabIndex = 74;
+            this.label9.Text = "mark";
+            // 
             // Work
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1478, 645);
+            this.Controls.Add(this.label9);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.prgDownload);
             this.Controls.Add(this.btnStop);
@@ -419,5 +430,6 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.TextBox txtPort;
         private System.Windows.Forms.Label lblPort;
+        private System.Windows.Forms.Label label9;
     }
 }

@@ -23,10 +23,15 @@ namespace WindowsForms_TestClient.Forms
    public partial class Work : Form
     {
         private Socket clientSocket;
-        Dictionary<RadioButton, TextBox> answers = new Dictionary<RadioButton, TextBox>(); //кнопка - заппитання
-        List<Question> r2 = new List<Question>(); //список запитань та відповідей
-        private SomeTest test;
-        private Answer answer;
+
+        Dictionary<RadioButton, TextBox> answersDictionary = new Dictionary<RadioButton, TextBox>(); //кнопка - заппитання
+        List<Question> questList = new List<Question>(); //список запитань та відповідей
+        List<Answer>answersList=new List<Answer>();
+
+        private SomeTest testClass;
+        private Question questionClass;
+        private Answer answerClass;
+
         // The thread in which the file will be received
         private Thread thrDownload;
         // The stream for writing the file to the hard-drive
@@ -42,6 +47,8 @@ namespace WindowsForms_TestClient.Forms
         // For storing the progress in percentages
         private static int PercentProgress;
         int counter = 0;
+        private float mark = 0,temp=0;
+        private RadioButton r = new RadioButton();
         public Work()
         {
             InitializeComponent();
@@ -61,8 +68,8 @@ namespace WindowsForms_TestClient.Forms
 
             using (var db = new MyContext())
             {
-                var rez = db.Tests.ToList(); /////////////////////////////////   SELECT   
-                foreach (var i in rez) /////////////////////////////////    PRINT
+                var rez = db.Tests.ToList();  
+                foreach (var i in rez) 
                 {
                     listBox2.Items.Add( i.PathToFile);
                 }
@@ -105,43 +112,26 @@ namespace WindowsForms_TestClient.Forms
 
             if (listBox2.SelectedIndex == -1) return;
             string w = this.listBox2.SelectedItem.ToString();
-            //XDocument doc = XDocument.Load(w);
-
-            //var rez = doc.Element("SomeTest").Elements("SomeTest").Select(i => new SomeTest()
-            //{ TestName  = i.Attribute("TestName").Value, Subject= i.Attribute("Subject").Value, Author = i.Attribute("Author").Value });
-
-            //foreach (var i in rez)
-            //{
-            //    textBox2.Text = i.TestName;
-            //       textBox3.Text = i.Subject;
-            //        textBox4.Text = i.Author;
-            //}
+            
             XmlSerializer serializer = new XmlSerializer(typeof(SomeTest));
 
             StreamReader reader = new StreamReader(w);
             //r1 = (SomeTest)serializer.Deserialize(reader);
-             test = (SomeTest) serializer.Deserialize(reader);
-            foreach (var i in test.quest)
+             testClass = (SomeTest) serializer.Deserialize(reader);
+            foreach (var i in testClass.quest)
             {
-              r2.Add(i);    
+              questList.Add(i);    
             }
-            textBox2.Text =test.TestName;
-            textBox3.Text =test.Subject;
-            textBox4.Text =test.Author;
+            textBox2.Text =testClass.TestName;
+            textBox3.Text =testClass.Subject;
+            textBox4.Text =testClass.Author;
                                      
-
-
             listBox1.Items.Clear();
-            foreach (var i in test.quest)
+            foreach (var i in testClass.quest)
             {
                 listBox1.Items.Add(i.Title);
+
                 
-                //foreach (var a in i.answers)
-                //{
-                //    answer.Text = a.Text;
-                //    answer.Correct = a.Correct;
-                //    answer.Weight = a.Weight;
-                //}
             }
 
             listBox2.Visible = false;
@@ -151,12 +141,13 @@ namespace WindowsForms_TestClient.Forms
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBox1.SelectedIndex == -1) return;
-            var qustList = new List<Question> {r2[listBox1.SelectedIndex]};
+            var qustList = new List<Question> {questList[listBox1.SelectedIndex]};
 
             foreach (var q in qustList)
             {
                 label3.Text = q.Title;
                 textBox1.Text = q.Text;
+                
                 int x = 0, y = 20, a = 0;
                 do
                {
@@ -164,11 +155,11 @@ namespace WindowsForms_TestClient.Forms
                    {
                       
                         a++;
-                       
+                        temp = item.Weight;
                         RadioButton r = new RadioButton(); //створ радіокнопку 
                        r.Location = new Point(x = 5, y); //координати
                        r.Parent = groupBox1; //щоб відображались на полі drodBox
-                       r.Text = item.Correct.ToString();
+                      // r.Text = item.Correct.ToString();
 
                        TextBox t = new TextBox(); //створюєм текстове поле
                        t.Location = new Point(x = 110, y); //задаємо йому кординати
@@ -177,7 +168,7 @@ namespace WindowsForms_TestClient.Forms
                        t.Text = (item.Text);
                        y += 30; //перша точка-0,2-га - 30,3-тя- 60,4-та- 90,,,
 
-                       answers.Add(r, t); //колекція полів збережеться в Dictionary
+                       answersDictionary.Add(r, t); //колекція полів збережеться в Dictionary
 
                    }
                } while (q.answers.Count != a);
@@ -190,9 +181,27 @@ namespace WindowsForms_TestClient.Forms
         {
             label3.Text = "Запитання";
             textBox1.Text = "";
-            
-            groupBox1.Controls.Clear();//очищаємо поля
+
+            //groupBox1.Controls.Clear();//очищаємо поля
             //answers.Clear();//очищаємо поля
+           // if (testClass.quest[answersList.Count].answers[i].Correct == (r.Checked = true))
+                var qustList = new List<Question> { questList[listBox1.SelectedIndex] };
+            int count = answersDictionary.Count;
+            for (int i = 0; i < count; i++)
+            {
+                foreach (var ql in qustList)
+                {
+                    if (ql.answers[i].Correct == (r.Checked = true))
+                    {
+                        mark += temp;
+                        label9.Text = mark.ToString();
+                        temp = 0;
+
+                    }
+                    groupBox1.Controls.Clear();
+                }
+            }
+            answersDictionary.Clear();
         }
         private void CreateConnect()
         {
