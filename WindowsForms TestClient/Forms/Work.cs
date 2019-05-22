@@ -48,23 +48,18 @@ namespace WindowsForms_TestClient.Forms
         private static int PercentProgress;
         int counter = 0;
         private float mark = 0,temp=0;
-        private RadioButton r = new RadioButton();
+        private RadioButton r = new RadioButton() ;
+        //private RadioButton [] rm = new RadioButton[9];
         public Work()
         {
             InitializeComponent();
+            timer1.Stop();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
          
-        // Run this procedure in an appropriate event.  
-        //counter = 0;
-            timer1.Interval = 1000;
-            timer1.Enabled = true;
-            // Hook up timer's tick event handler.  
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            //
-           
+        
 
             using (var db = new MyContext())
             {
@@ -73,14 +68,17 @@ namespace WindowsForms_TestClient.Forms
                 {
                     listBox2.Items.Add( i.PathToFile);
                 }
+               db.Dispose();
             }
 
 
         }
-            private void timer1_Tick(object sender, System.EventArgs e)
+        private void timer1_Tick(object sender, System.EventArgs e)
         {
-
-            if (counter < 10)
+            int rez = questList.Count * 10; //120->2 min
+            double a = (rez * 0.8);
+            double b = (rez * 0.2);
+            if (counter <a )
             {
                 // Run your procedure here.  
                 // Increment counter.
@@ -88,35 +86,59 @@ namespace WindowsForms_TestClient.Forms
                 counter = counter + 1;
                 label7.Text = "Test Run: " + counter.ToString();
             }
-            if (counter >= 10)
+            if (counter > a)
             {
-                label7.ForeColor=Color.Red;
+                label7.ForeColor = Color.Red;
                 counter = counter + 1;
                 label7.Text = "Test Run: " + counter.ToString();
             }
-           
-            if (counter == 20)
+
+            if (counter == rez * 1)
             {
                 // Exit loop code.  
                 timer1.Enabled = false;
                 counter = 0;
                 label7.Text = "Test Close !!!";
-                
-                label7.ForeColor = Color.Black;
-                //this.Dispose();    ////TODO
+                listBox1.Items.Clear();
+                button2.Visible = false;
+                float finalMark = mark;
+                label9.Text = "Your final mark : " + finalMark;
+                using (MyContext context = new MyContext())
+                {
+                    TestResult tr = new TestResult()
+                    {
+                        DateTest = DateTime.Now,
+                        Mark = finalMark,
+                        UserId = TakeUsersId.TakeId,
+                        TestId = TakeFileId.FileId
+                    };
+                    context.TestResults.Add(tr);
+                    context.SaveChanges();
+                    context.Dispose();
+                }
+
+                //TakeUsersId.TakeId = 0;
+                //TakeFileId.FileId = 0;
             }
         }
-
+        
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
 
             if (listBox2.SelectedIndex == -1) return;
             string w = this.listBox2.SelectedItem.ToString();
+            using (MyContext context = new MyContext())
+            {
+
+                int rez = context.Tests.Where(x => x.PathToFile == w).Select(x => x.Id).Single();
+                TakeFileId.FileId = rez;
+                context.Dispose();
+            }
             
             XmlSerializer serializer = new XmlSerializer(typeof(SomeTest));
 
             StreamReader reader = new StreamReader(w);
-            //r1 = (SomeTest)serializer.Deserialize(reader);
+           
              testClass = (SomeTest) serializer.Deserialize(reader);
             foreach (var i in testClass.quest)
             {
@@ -130,9 +152,9 @@ namespace WindowsForms_TestClient.Forms
             foreach (var i in testClass.quest)
             {
                 listBox1.Items.Add(i.Title);
-
-                
             }
+
+            
 
             listBox2.Visible = false;
             reader.Close();
@@ -140,9 +162,19 @@ namespace WindowsForms_TestClient.Forms
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex == -1) return;
-            var qustList = new List<Question> {questList[listBox1.SelectedIndex]};
+            // Run this procedure in an appropriate event.  
+            //counter = 0;
+            timer1.Interval = 1000;
+            timer1.Enabled = true;
+            // Hook up timer's tick event handler.  
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            //
 
+            if (listBox1.SelectedIndex == -1) return;
+            timer1.Start();
+            var qustList = new List<Question> {questList[listBox1.SelectedIndex]};
+            answersDictionary.Clear();
+            
             foreach (var q in qustList)
             {
                 label3.Text = q.Title;
@@ -153,23 +185,29 @@ namespace WindowsForms_TestClient.Forms
                {
                    foreach (var item in q.answers)
                    {
-                      
-                        a++;
-                        temp = item.Weight;
-                        RadioButton r = new RadioButton(); //створ радіокнопку 
-                       r.Location = new Point(x = 5, y); //координати
-                       r.Parent = groupBox1; //щоб відображались на полі drodBox
-                      // r.Text = item.Correct.ToString();
+                       
 
-                       TextBox t = new TextBox(); //створюєм текстове поле
-                       t.Location = new Point(x = 110, y); //задаємо йому кординати
-                       t.Size = new Size(300, 30); //розмір
-                       t.Parent = groupBox1; //добавляємо батька щоб текстове поле було над drobBox
-                       t.Text = (item.Text);
-                       y += 30; //перша точка-0,2-га - 30,3-тя- 60,4-та- 90,,,
 
-                       answersDictionary.Add(r, t); //колекція полів збережеться в Dictionary
+                           a++;
+                           temp = item.Weight;
+                          
+                            RadioButton r = new RadioButton(); //створ радіокнопку 
+                            r.Location = new Point(x = 5, y); //координати
+                            r.Parent = groupBox1; //щоб відображались на полі drodBox
 
+                            
+                            TextBox t = new TextBox(); //створюєм текстове поле
+                            t.Location = new Point(x = 110, y); //задаємо йому кординати
+                            t.Size = new Size(300, 30); //розмір
+                            t.Parent = groupBox1; //добавляємо батька щоб текстове поле було над drobBox
+                            t.Text = (item.Text);
+                            t.ReadOnly = true;
+                            y += 30; //перша точка-0,2-га - 30,3-тя- 60,4-та- 90,,,
+
+                            answersDictionary.Add(r, t); //колекція полів збережеться в Dictionary
+                        
+                          
+                       
                    }
                } while (q.answers.Count != a);
 
@@ -179,21 +217,49 @@ namespace WindowsForms_TestClient.Forms
        
         private void button2_Click(object sender, EventArgs e)
         {
-            label3.Text = "Запитання";
+            label3.Text = "Question";
             textBox1.Text = "";
 
             var qustList = new List<Question> { questList[listBox1.SelectedIndex] };
             int count = answersDictionary.Count;
-            for (int i = 0; i < count; i++)
+            foreach (var ql in qustList)
             {
-                foreach (var ql in qustList)
-                {
-                    if (ql.answers[i].Correct == (r.Checked = true))
+                for (int i = 0; i < count; i++)
+                 {
+               
+                    if (ql.answers[i].Correct ==(this. r.Checked==true))
                     {
                         mark += temp;
                         label9.Text = mark.ToString();
                         temp = 0;
 
+                    }
+
+                    if (mark > 100)
+                    {
+                        float finalMark = mark;
+                        label9.Text = "Your final mark : " + finalMark;
+                        using (MyContext context = new MyContext())
+                        {
+                            TestResult tr = new TestResult()
+                            {
+                                DateTest = DateTime.Now,
+                                Mark = finalMark,
+                                UserId = TakeUsersId.TakeId,
+                                TestId = TakeFileId.FileId
+                            };
+                            context.TestResults.Add(tr);
+                            context.SaveChanges();
+                            context.Dispose();
+                        }
+
+                        //TakeUsersId.TakeId = 0;
+                        //TakeFileId.FileId = 0;
+                    }
+                    else
+                    {
+                        mark += 0;
+                        i = count;
                     }
                     groupBox1.Controls.Clear();
                 }

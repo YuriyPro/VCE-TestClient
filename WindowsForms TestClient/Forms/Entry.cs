@@ -43,17 +43,21 @@ namespace WindowsForms_TestClient
                     string str = Additional.CreateMD5Hash(textBox2.Text);
                     User user = context.Users.Where(x => x.Name == textBox1.Text && x.Password == str && x.Status.Name == "Students").SingleOrDefault();
 
-                    if (user != null)
+                    var rez = context.Users.Where(x => x.Name == textBox1.Text).Select(x => x.Id).Single();
+                   
+                    if (user != null  && rez!=null)
                     {
+                        TakeUsersId.TakeId = rez;
                         MessageBox.Show("Hi!!!");
-
+                        context.Dispose();
                         Entry.ActiveForm.Hide();
                         Work w = new Work();
                         w.ShowDialog();
                         Close();
+
                     }
                     else MessageBox.Show("Login or Password is incorect");
-
+                    
                 }
             }
         }
